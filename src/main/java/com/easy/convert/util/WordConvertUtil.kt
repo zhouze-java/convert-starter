@@ -188,7 +188,7 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
         // 添加水印
         addConfigWatermarks(document,watermarksProperties)
         // 检查后缀并保存
-        checkSuffixAndSave(filePath, document, outputFilePath)
+        checkSuffixAndSave(document, outputFilePath)
     }
 
     /**
@@ -197,9 +197,9 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
      * @param document 文档
      * @param outputFilePath 输出路径
      */
-    private fun checkSuffixAndSave(filePath: String, document: Document, outputFilePath: String) {
+    private fun checkSuffixAndSave(document: Document, outputFilePath: String) {
         // 拿到文件后缀名
-        val suffix = getFileSuffix(filePath)
+        val suffix = getFileSuffix(outputFilePath)
         // 判断保存
         if (suffix == "doc") {
             document.save(outputFilePath, SaveFormat.DOC)
@@ -224,7 +224,7 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
             addConfigWatermarks(cloneDocument)
         }
         // 检查后缀并保存
-        checkSuffixAndSave(filePath, cloneDocument, outputFilePath)
+        checkSuffixAndSave(cloneDocument, outputFilePath)
     }
 
     /**
@@ -235,10 +235,48 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
     }
 
     /**
+     * txt 转 word
+     * @param filePath
+     * @param outputFilePath
+     */
+    fun txtToWord(filePath: String,outputFilePath: String){
+        require(getFileSuffix(filePath) == "txt"){"输入文件必须是txt"}
+
+        // 直接把txt加载成document
+        val document = Document(filePath)
+
+        // 保存
+        document.save(outputFilePath)
+    }
+
+    /**
      * 获取文件后缀名
      */
     private fun getFileSuffix(filePath: String):String{
         return filePath.substring(filePath.lastIndexOf(".") + 1)
+    }
+
+    /**
+     * 修改文档为只读
+     * @param filePath 输入路径
+     * @param outputFilePath 输出路径
+     */
+    fun toReadOnly(filePath: String, outputFilePath: String) {
+        protect(filePath,outputFilePath,ProtectionType.READ_ONLY)
+    }
+
+    /**
+     * 文档保护
+     * @param filePath 输入路径
+     * @param outputFilePath 输出路径
+     * @param protectionType 保护等级,具体参考 {@link ProtectionType} 类
+     */
+    fun protect(filePath: String, outputFilePath: String, protectionType:Int){
+        val document = Document(filePath)
+        // 修改
+        document.protect(protectionType)
+        // 输出
+        checkSuffixAndSave(document, outputFilePath)
     }
 }
 
@@ -246,7 +284,7 @@ fun main(args: Array<String>) {
     val wordWatermarksProperties = WordWatermarksProperties()
     wordWatermarksProperties.text = "test"
 
-    WordConvertUtil(WordProperties()).clone("C:\\Users\\Administrator\\Desktop\\毕业论文-周泽.docx", "C:\\Users\\Administrator\\Desktop\\毕业论文-周泽-1.docx")
-
+//    WordConvertUtil(WordProperties()).clone("C:\\Users\\Administrator\\Desktop\\xxxx.docx", "C:\\Users\\Administrator\\Desktop\\xxxx-1.docx")
+    WordConvertUtil(WordProperties()).toReadOnly("C:\\Users\\Administrator\\Desktop\\xxxx.docx","C:\\Users\\Administrator\\Desktop\\test-1.docx")
 }
 
