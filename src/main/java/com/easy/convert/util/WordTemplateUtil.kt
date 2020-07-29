@@ -223,9 +223,9 @@ fun escapeExprSpecialWord(keyword: String): String {
 }
 
 fun main(args: Array<String>) {
-    val mutableMapOf = mutableMapOf("name" to "mimi", "years" to 19)
+    val mutableMapOf = mutableMapOf("name" to "zhangsan", "age" to 19)
 
-    val imageData = ImageData("C:\\Users\\Administrator\\Desktop\\QQ.png", 200.00, 200.00)
+    val imageData = ImageData("C:\\Users\\Administrator\\Desktop\\test.png", 200.00, 200.00)
 
     val headers = listOf("姓名", "年龄", "地址")
 
@@ -237,7 +237,7 @@ fun main(args: Array<String>) {
     mutableMapOf["table1"] = tableData
     mutableMapOf["pic1"] = imageData
 
-    println(WordTemplateUtil(wordProperties = WordProperties()).findAllExprSpecialWord("C:\\Users\\Administrator\\Desktop\\xxxx1.docx"))
+//    println(WordTemplateUtil(wordProperties = WordProperties()).findAllExprSpecialWord("C:\\Users\\Administrator\\Desktop\\xxxx1.docx"))
 
 //    WordTemplateUtil(wordProperties = WordProperties()).render("C:\\Users\\Administrator\\Desktop\\xxxx1.docx",mutableMapOf,"C:\\Users\\Administrator\\Desktop\\xxxx1-out.docx")
 }
