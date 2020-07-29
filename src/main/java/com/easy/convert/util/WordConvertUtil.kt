@@ -62,7 +62,7 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
     }
 
     /**
-     * 重载
+     * 重载,兼容Java
      */
     fun convertFormat(filePath: String, saveFormat: String, outputFilePath: String): MutableList<String> {
         return convertFormat(filePath, saveFormat, outputFilePath,100f)
@@ -105,9 +105,8 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
      * 将多个 word 追加到第一个word中去
      * @param wordPath 要合并的word路径集合
      * @param outPath 输出路径,具体到文件名
-     * @param format 输出格式 doc/docx 默认是 docx
      */
-    fun appendDoc(wordPath: List<String>, outPath: String, format: String = "docx") {
+    fun appendDoc(wordPath: List<String>, outPath: String) {
         require(wordPath.isNotEmpty()) { "输入word路径集合不能为空" }
 
         // 把所有的doc找出来放到一个集合中来
@@ -122,17 +121,14 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
             firstDoc.appendDocument(document, ImportFormatMode.USE_DESTINATION_STYLES)
         }
 
-        when{
-            format.equals("doc",ignoreCase = true) -> firstDoc.save(outPath, SaveFormat.DOC)
-            format.equals("docx",ignoreCase = true) -> firstDoc.save(outPath, SaveFormat.DOCX)
-            else -> throw Exception("不支持的输出类型")
-        }
+        // 检查后缀并保存
+        checkSuffixAndSave(firstDoc,outPath)
     }
 
     /**
      * 为文档添加水印,水印信息取自Spring的配置
      */
-    private fun addConfigWatermarks(document: Document, watermarksProperties:WordWatermarksProperties = this.wordProperties.watermarks){
+    fun addConfigWatermarks(document: Document, watermarksProperties:WordWatermarksProperties = this.wordProperties.watermarks){
         // 创建一个水印
         val watermark = Shape(document, ShapeType.TEXT_PLAIN_TEXT)
 
@@ -193,11 +189,10 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
 
     /**
      * 检查文件后缀名,并保存
-     * @param filePath 输入路径
      * @param document 文档
      * @param outputFilePath 输出路径
      */
-    private fun checkSuffixAndSave(document: Document, outputFilePath: String) {
+    fun checkSuffixAndSave(document: Document, outputFilePath: String) {
         // 拿到文件后缀名
         val suffix = getFileSuffix(outputFilePath)
         // 判断保存
@@ -213,7 +208,7 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
      * 克隆文件
      * @param filePath 输入路径
      * @param outputFilePath 输出路径
-     * @param watermarks 水印,默认是全局配置
+     * @param watermarks 是否添加水印,默认是全局配置
      */
     fun clone(filePath: String,outputFilePath: String, enableWatermarks:Boolean = wordProperties.watermarks.enable){
         val document = Document(filePath)
@@ -232,6 +227,13 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
      */
     fun clone(filePath: String,outputFilePath: String){
         clone(filePath, outputFilePath,wordProperties.watermarks.enable)
+    }
+
+    /**
+     * 不加水印复制
+     */
+    fun cloneWithNoWatermarks(filePath: String,outputFilePath: String){
+        clone(filePath, outputFilePath, false)
     }
 
     /**
@@ -278,6 +280,8 @@ class WordConvertUtil(private val wordProperties: WordProperties) {
         // 输出
         checkSuffixAndSave(document, outputFilePath)
     }
+
+
 }
 
 fun main(args: Array<String>) {

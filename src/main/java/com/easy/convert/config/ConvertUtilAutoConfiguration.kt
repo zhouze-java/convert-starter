@@ -1,6 +1,7 @@
 package com.easy.convert.config
 
 import com.easy.convert.util.WordConvertUtil
+import com.easy.convert.util.WordTemplateUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -21,6 +22,11 @@ open class ConvertUtilAutoConfiguration{
     @Bean
     open fun wordConvertUtil(): WordConvertUtil {
         return WordConvertUtil(wordProperties)
+    }
+
+    @Bean
+    open fun wordTemplateUtil(): WordTemplateUtil{
+        return WordTemplateUtil(wordProperties)
     }
 
 }

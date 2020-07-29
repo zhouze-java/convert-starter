@@ -12,5 +12,7 @@ import org.springframework.stereotype.Component
 @ConfigurationProperties(prefix = "file.config.word")
 data class WordProperties(
         // 水印相关配置
-        val watermarks: WordWatermarksProperties = WordWatermarksProperties()
+        val watermarks: WordWatermarksProperties = WordWatermarksProperties(),
+        // 模板相关配置
+        val template: WordTemplateProperties = WordTemplateProperties()
 )
