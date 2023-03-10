@@ -1,6 +1,6 @@
 package com.easy.convert.config
 
-import com.easy.convert.util.escapeExprSpecialWord
+import com.easy.convert.util.word.escapeExprSpecialWord
 
 /**
  * @author  周泽

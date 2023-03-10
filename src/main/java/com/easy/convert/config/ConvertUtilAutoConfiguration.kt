@@ -1,7 +1,8 @@
 package com.easy.convert.config
 
-import com.easy.convert.util.WordConvertUtil
-import com.easy.convert.util.WordTemplateUtil
+import com.easy.convert.util.excel.ExcelConvertUtil
+import com.easy.convert.util.word.WordConvertUtil
+import com.easy.convert.util.word.WordTemplateUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -25,8 +26,13 @@ open class ConvertUtilAutoConfiguration{
     }
 
     @Bean
-    open fun wordTemplateUtil(): WordTemplateUtil{
+    open fun wordTemplateUtil(): WordTemplateUtil {
         return WordTemplateUtil(wordProperties)
+    }
+
+    @Bean
+    open fun excelConvertUtil():ExcelConvertUtil{
+        return ExcelConvertUtil()
     }
 
 }
